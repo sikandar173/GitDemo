@@ -1,0 +1,53 @@
+/* Style for the drop zone */
+.drop-zone {
+    min-height: 100px;
+    border: 2px dashed #d8dde6;
+    background-color: transparent;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transition: border-color 0.3s ease, background-color 0.3s ease;
+}
+
+/* Style for draggable fields */
+.draggable-field {
+    cursor: grab;
+    background-color: #f3f3f3;
+    padding: 8px;
+    border-radius: 5px;
+    text-align: center;
+    user-select: none;
+}
+
+/* Optional: Additional styling for clarity */
+.slds-box {
+    padding: 1rem;
+}
+
+.scrollable-fields {
+    max-height: 300px; /* Restricts the height of the available fields list */
+    overflow-y: auto; /* Enables vertical scrolling */
+    border: 1px solid #ccc;
+    padding: 10px;
+}
+
+.sticky-fields {
+    position: sticky;
+    top: 10px; /* Keeps the available fields panel visible */
+}
+
+.draggable-field:hover {
+    background-color: #e0e0e0;
+}
+/* Green border for successful first-time drop */
+.drop-zone.success-drop {
+    border: 2px solid green !important;
+    background-color: #d4f8d4 !important;
+}
+
+/* Red border for duplicate drop */
+.drop-zone.error-drop {
+    border: 2px solid red !important;
+    background-color: #ffcccc !important;
+}

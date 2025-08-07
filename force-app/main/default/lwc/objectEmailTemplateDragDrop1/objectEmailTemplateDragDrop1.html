@@ -1,0 +1,108 @@
+<template>
+    <!-- Step 1: Show Button to Load Templates -->
+    <template if:true={isInitialStep}>
+        <lightning-card title="Load Email Templates">
+            <div class="slds-p-around_medium">
+                <lightning-button label="Load Templates" variant="brand" onclick={loadTemplates}></lightning-button>
+            </div>
+        </lightning-card>
+    </template>
+
+    <!-- Step 2: Select an Email Template -->
+    <template if:true={isTemplateSelectionStep}>
+        <lightning-card title="Select an Email Template">
+            <div class="slds-p-around_medium">
+                <template if:true={emailTemplates.length}>
+                    <lightning-radio-group
+                        label="Choose an Email Template"
+                        options={emailTemplateOptions}
+                        value={selectedEmailTemplateId}
+                        onchange={handleTemplateChange}>
+                    </lightning-radio-group>
+                </template>
+                <template if:false={emailTemplates.length}>
+                    <p>No email templates available.</p>
+                </template>
+            </div>
+        </lightning-card>
+    </template>
+
+     <!-- Step 3: Edit Email Template -->
+     <template if:true={isEditingStep}>
+        <lightning-card title="Edit Email Template">
+            <div class="slds-p-around_medium">
+                <h3>{selectedEmailTemplate.Name}</h3>
+                <p><strong>Header:</strong> {selectedEmailTemplate.Subject}</p>
+                <div class="slds-grid slds-wrap slds-m-top_medium">
+                    
+                    <!-- Sticky Available Fields Panel -->
+                    <div class="slds-col slds-size_1-of-3 sticky-fields">
+                        <lightning-card title="Available Fields">
+                            <div class="slds-p-around_medium scrollable-fields">
+                                <template for:each={relatedFields} for:item="field">
+                                    <div key={field.fieldApiName}
+                                         class="draggable-field slds-box slds-m-around_small"
+                                         draggable="true"
+                                         data-id={field.fieldApiName}
+                                         ondragstart={handleDragStart}>
+                                        {field.label}
+                                    </div>
+                                </template>
+                            </div>
+                        </lightning-card>
+                    </div>
+
+                    <!-- Email Template Editor -->
+                    <div class="slds-col slds-size_2-of-3">
+                        <lightning-card title="Email Template Editor">
+                            <div class="slds-p-around_medium">
+                                <div class="drop-zone slds-box slds-m-bottom_medium"
+                                     ondragover={handleDragOver}
+                                     ondragleave={handleDragLeave}
+                                     ondrop={handleDrop}
+                                    >
+                                    <p>Drop fields here to insert merge fields into the template</p>
+                                </div>
+                                <div class="emailBody">
+                                    <lightning-input-rich-text
+                                    label="Edit Email Body"
+                                    value={emailBodyContent}
+                                    onchange={handleRichTextChange}>
+                                </lightning-input-rich-text>
+                                </div>
+                            </div>
+                        </lightning-card>
+                    </div>
+                </div>
+                <div class="slds-m-top_medium">
+                    <lightning-button label="Back" variant="neutral" onclick={goToTemplateSelection}></lightning-button>
+                    <lightning-button label="Finish" variant="brand" onclick={goToPreview} class="slds-m-left_small"></lightning-button>
+                </div>
+            </div>
+        </lightning-card>
+    </template>
+
+    <!-- Step 4: Preview Email Before Sending -->
+    <template if:true={isPreviewStep}>
+        <lightning-card title="Preview Email">
+            <div class="slds-p-around_medium">
+                <lightning-input type="email" label="From" value={emailFrom} onchange={handleFromChange}></lightning-input>
+                <lightning-input type="email" label="To" value={emailTo} onchange={handleToChange}></lightning-input>
+                <lightning-input type="email" label="CC" value={emailCc} onchange={handleCcChange}></lightning-input>
+                <lightning-input type="email" label="BCC" value={emailBcc} onchange={handleBccChange}></lightning-input>
+
+                <lightning-card title="Email Preview">
+                    <div class="slds-p-around_medium">
+                        <p><strong>Subject:</strong> {selectedEmailTemplate.Subject}</p>
+                        <lightning-formatted-rich-text value={emailBodyContent}></lightning-formatted-rich-text>
+                    </div>
+                </lightning-card>
+
+                <div class="slds-m-top_medium">
+                    <lightning-button label="Back" variant="neutral" onclick={goToEditing}></lightning-button>
+                    <lightning-button label="Send Email" variant="brand" onclick={sendEmail} class="slds-m-left_small"></lightning-button>
+                </div>
+            </div>
+        </lightning-card>
+    </template>
+</template>
