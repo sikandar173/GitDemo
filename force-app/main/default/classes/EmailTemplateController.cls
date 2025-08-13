@@ -8,11 +8,6 @@ public with sharing class EmailTemplateController {
     @AuraEnabled(cacheable=true)
     public static List<FieldWrapper> getRelatedFields(Id templateId) {
         EmailTemplate template = [SELECT RelatedEntityType FROM EmailTemplate WHERE Id = :templateId LIMIT 1];
-
-
-
-
-        
         if (template.RelatedEntityType == null) {
             return new List<FieldWrapper>();
         }
